@@ -8,6 +8,7 @@ import com.maidev.bankservice.repository.BankRepository;
 import java.util.List;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Transactional
 public class BankService {
+    
+    @Autowired
     private final BankRepository bankRepository; 
+
     public void createBankRequest(BankRequest bankRequest) {
         Bank loan = Bank.builder()
             .name(bankRequest.getName())
@@ -27,11 +31,22 @@ public class BankService {
             .supportedLoanTypes(bankRequest.getSupportedLoanTypes())
             .build();
             bankRepository.save(loan);
+
         log.info("Bank {} is saved!", loan.getId());
     }
 
     public List<BankResponse> getAllBankResponses() {
         return bankRepository.findAll().stream().map(this::mapToBankResponse).toList();
+    }
+
+    private BankResponse mapToBankResponse(Bank bank) {
+        return BankResponse.builder()
+        .id(bank.getId())
+        .name(bank.getName())
+        .supportedLoanTypes(bank.getSupportedLoanTypes())
+        .maxLoanAmount(bank.getMaxLoanAmount())
+        .maxNumberMonth(bank.getMaxNumberMonth())
+        .build();
     }
 
    

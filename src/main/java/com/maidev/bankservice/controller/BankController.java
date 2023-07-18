@@ -2,6 +2,7 @@ package com.maidev.bankservice.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,9 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("api/bank")
 public class BankController {
+    @Autowired
     private final BankService bankService;
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void createBankRequest(@RequestBody BankRequest bankRequest){
